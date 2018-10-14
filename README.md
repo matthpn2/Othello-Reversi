@@ -37,3 +37,7 @@ game is complete and at which point the program ends. Until the game is over, th
     5. If the game is not over, repeat back to step 1. Otherwise, if the game is over, display the board, the score, and the 
        winner of the game (or no winner at all).
     6. The game ends and the program closes.
+    
+![program execution](https://i.imgur.com/w9fMCXf.png)
+![program execution](https://i.imgur.com/0gOfy0c.png)
+ 
