@@ -29,7 +29,7 @@ game is complete and at which point the program ends. Until the game is over, th
 
 '''
 
-import OthelloGameLogic
+import othello_game_logic as ogl
 
 def board_rows():
     '''
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     first_turn = board_turn()
     print()
 
-    board = OthelloGameLogic.OthelloBoard(default_row, default_column, color_position, first_turn)
+    board = ogl.OthelloBoard(default_row, default_column, color_position, first_turn)
     board.default_board()
 
     game_over = False
