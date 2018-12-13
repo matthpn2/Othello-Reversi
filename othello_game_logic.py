@@ -39,23 +39,23 @@ class OthelloGameOver(Exception):
 
 class OthelloBoard:
     def __init__(self, rows, columns, color, turn):
-        self._row = rows
-        self._column = columns
+        self.row = rows
+        self.column = columns
 
-        self._input_row = 0
-        self._input_column = 0
-        self._input_disc = ''
+        self.input_row = 0
+        self.input_column = 0
+        self.input_disc = ''
 
-        self._board = []
-        self._flipped_discs = []
+        self.board = []
+        self.flipped_discs = []
 
-        self._position_color = color
-        self._current_turn = turn
-        self._opposing_turn = ''
+        self.position_color = color
+        self.current_turn = turn
+        self.opposing_turn = ''
 
-        self._black_score = 0
-        self._white_score = 0
-        self._winner = ''
+        self.black_score = 0
+        self.white_score = 0
+        self.winner = ''
 
     def default_board(self):
         '''
@@ -63,121 +63,115 @@ class OthelloBoard:
             separated diagonally & arranged on the four center spaces of the grid. By default, the board has
             size rows x columns and is comprised of empty strings for easy readability.
         '''
-        for row in range(self._row):
-            self._board.append([' '] * self._column)
+        for _ in range(self.row):
+            self.board.append([' '] * self.column)
         
-        if self._position_color == 'W':
-            self._board[int((self._row/2) - 1)][int((self._column/2) - 1)] = 'W'
-            self._board[int(self._row/2)][int(self._column/2)] = 'W'
-            self._board[int((self._row/2) - 1)][int(self._column/2)] = 'B'
-            self._board[int(self._row/2)][int((self._column/2) - 1)] = 'B'
-
-        elif self._position_color == 'B':
-            self._board[int((self._row/2) - 1)][int((self._column/2) - 1)] = 'B'
-            self._board[int(self._row/2)][int(self._column/2)] = 'B'
-            self._board[int((self._row/2) - 1)][int(self._column/2)] = 'W'
-            self._board[int(self._row/2)][int((self._column/2) - 1)] = 'W'
+        if self.position_color == 'W':
+            self.board[int((self.row/2) - 1)][int((self.column/2) - 1)] = 'W'
+            self.board[int(self.row/2)][int(self.column/2)] = 'W'
+            self.board[int((self.row/2) - 1)][int(self.column/2)] = 'B'
+            self.board[int(self.row/2)][int((self.column/2) - 1)] = 'B'
+        elif self.position_color == 'B':
+            self.board[int((self.row/2) - 1)][int((self.column/2) - 1)] = 'B'
+            self.board[int(self.row/2)][int(self.column/2)] = 'B'
+            self.board[int((self.row/2) - 1)][int(self.column/2)] = 'W'
+            self.board[int(self.row/2)][int((self.column/2) - 1)] = 'W'
 
     def print_score(self):
         '''
             Checks all the spaces on the game board and prints the count of each color disk, black and white.
         '''
-        self._black_score = 0
-        self._white_score = 0
+        self.black_score = 0
+        self.white_score = 0
 
-        for row in self._board:
+        for row in self.board:
             for column in row:
                 if column == 'B':
-                    self._black_score += 1
+                    self.black_score += 1
                 elif column == 'W':
-                    self._white_score += 1
-        
-        print('B: ' + str(self._black_score) + ' | ' + 'W: ' + str(self._white_score))
+                    self.white_score += 1
+        print('B: ' + str(self.black_score) + ' | ' + 'W: ' + str(self.white_score))
 
     def print_board(self):
         '''
             Processes the board, row by row, and prints out each value; if empty, periods are printed instead.
         '''
         print('  ', end = '')
-        for row in range(self._row):
+        for row in range(self.row):
             print(str(row + 1), end = ' ')
         print()
 
         column_num = 1
-        for row in self._board:
+        for row in self.board:
             print(str(column_num), end = ' ')
             column_num += 1
-
             for column in row:
                 if column == ' ':
                     print('.', end = " ")
                 else:
                     print(column, end = " ")
-
             print()
     
     def print_turn(self):
         '''
             Print out the current player's turn.
         '''
-        print(self._current_turn + " player's turn.")
+        print(self.current_turn + " player's turn.")
     
     def disk_color(self, row, column):
         '''
             Sets opposing player's color and determines whether a disk is in some space on the board; if so, 
             determine its color.
         '''
-        self._input_row = row
-        self._input_column = column
-        self._input_disc = self._board[row][column]
+        self.input_row = row
+        self.input_column = column
+        self.input_disc = self.board[row][column]
 
-        if self._current_turn == 'B':
-            self._opposing_turn = 'W'
-        
-        elif self._current_turn == 'W':
-            self._opposing_turn = 'B'
+        if self.current_turn == 'B':
+            self.opposing_turn = 'W'
+        elif self.current_turn == 'W':
+            self.opposing_turn = 'B'
 
     def valid_move(self):
         '''
             Returns False if move is invalid; otherwise, if move is valid, returns a list of spaces that 
             would be flipped to the current player's color.
         '''
-        if self._input_disc != ' ' or not _valid_row_number(self._input_row, self._row) or not _valid_column_number(self._input_column, self._column):
+        if self.input_disc != ' ' or not _valid_row_number(self.input_row, self.row) or not _valid_column_number(self.input_column, self.column):
             return False
 
         for x_row, y_column in ( [1,1], [1,-1], [-1,-1], [-1,1], [0,1], [0,-1], [1,0], [-1,0] ):
-            x, y = self._input_row, self._input_column
+            x, y = self.input_row, self.input_column
             x += x_row
             y += y_column
 
-            if _valid_row_number(x, self._row) and _valid_column_number(y, self._column) and self._board[x][y] == self._opposing_turn:
+            if _valid_row_number(x, self.row) and _valid_column_number(y, self.column) and self.board[x][y] == self.opposing_turn:
                 x += x_row
                 y += y_column
 
-                if not _valid_row_number(x, self._row) or not _valid_column_number(y, self._row):
+                if not _valid_row_number(x, self.row) or not _valid_column_number(y, self.row):
                     continue
 
-                while self._board[x][y] == self._opposing_turn:
+                while self.board[x][y] == self.opposing_turn:
                     x += x_row
                     y += y_column
 
-                    if not _valid_row_number(x, self._row) or not _valid_column_number(y, self._column):
+                    if not _valid_row_number(x, self.row) or not _valid_column_number(y, self.column):
                         break
                     
-                if not _valid_row_number(x, self._row) or not _valid_column_number(y, self._column):
+                if not _valid_row_number(x, self.row) or not _valid_column_number(y, self.column):
                     continue
                 
-                if self._board[x][y] == self._current_turn:
+                if self.board[x][y] == self.current_turn:
                     while True:
                         x -= x_row
                         y -= y_column
 
-                        if (x, y) == (self._input_row, self._input_column):
+                        if (x, y) == (self.input_row, self.input_column):
                             break
-                        
-                        self._flipped_discs.append([x, y])
+                        self.flipped_discs.append([x, y])
         
-        if len(self._flipped_discs) == 0:
+        if len(self.flipped_discs) == 0:
             return False
 
     def require_valid_move(self):
@@ -193,25 +187,24 @@ class OthelloBoard:
             the opposing player's valid disks.
         '''
         self.require_valid_move()
-
-        for row, column in self._flipped_discs:
-            self._board[row][column] = self._current_turn
-        self._board[self._input_row][self._input_column] = self._current_turn
+        for row, column in self.flipped_discs:
+            self.board[row][column] = self.current_turn
+        self.board[self.input_row][self.input_column] = self.current_turn
     
     def change_turn(self):
         '''
             Given the current player's turn, change to the opposing player's turn.
         '''
-        if self._current_turn == 'B':
-            self._current_turn = 'W'
+        if self.current_turn == 'B':
+            self.current_turn = 'W'
         else:
-            self._current_turn = 'B'
+            self.current_turn = 'B'
 
     def reset_moves(self):
         '''
             Resets list of possible disks that can be flipped by a certain move.
         '''
-        self._flipped_discs = []
+        self.flipped_discs = []
     
     def game_over(self):
         '''
@@ -222,23 +215,20 @@ class OthelloBoard:
         '''
         flipped_discs = []
 
-        for row in range(self._row):
-            for column in range(self._column): 
+        for row in range(self.row):
+            for column in range(self.column): 
                 self.disk_color(row, column)
                 if self.valid_move() != False:
                     flipped_discs.append([row, column])
         
         if len(flipped_discs) == 0:
             self.change_turn()
-
-            for row in range(self._row):
-                for column in range(self._column): 
+            for row in range(self.row):
+                for column in range(self.column): 
                     self.disk_color(row, column)
                     if self.valid_move() != False:
                         flipped_discs.append([row, column])
-
             return len(flipped_discs) == 0
-    
         return False
     
     def require_game_not_over(self):
@@ -252,22 +242,22 @@ class OthelloBoard:
         '''
             The player with the most disks on the board at the end of the game is the winner.
         '''
-        if self._black_score > self._white_score:
-            self._winner = 'B'
-        elif self._black_score < self._white_score:
-            self._winner = 'W'
+        if self.black_score > self.white_score:
+            self.winner = 'B'
+        elif self.black_score < self.white_score:
+            self.winner = 'W'
         else:
-            self._winner = 'NONE'
+            self.winner = 'NONE'
 
     def print_winner(self):
         '''
             Print out the winner of the game.
         '''
         self.get_winner()
-        if self._winner == 'None':
+        if self.winner == 'None':
             print('The game has ended in a tie.')
         else:
-            print('Congratulations, ' + self._winner + ' is the game winner!')
+            print('Congratulations, ' + self.winner + ' is the game winner!')
 
 def _valid_row_number(inputRow, row):
     '''
